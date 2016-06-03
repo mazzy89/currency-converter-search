@@ -1,0 +1,15 @@
+{
+  "babelMapsPath": "",
+  "babelMapsAddUrl": false,
+  "babelSourcePath": "lib",
+  "babelTranspilePath": "dist",
+  "babelMapsPath": "dist",
+  "createMap": true,
+  "createTargetDirectories": true,
+  "createTranspiledCode": true,
+  "disableWhenNoBabelrcFileInPath": true,
+  "suppressSourcePathMessages": false,
+  "suppressTranspileOnSaveMessages": false,
+  "transpileOnSave": true,
+  "projectRoot": true
+}

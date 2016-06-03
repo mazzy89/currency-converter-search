@@ -1,0 +1,14 @@
+{
+  "extends": "seneca",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": [
+    "babel"
+  ],
+  "rules": {
+    "generator-star-spacing": 0,
+    "babel/generator-star-spacing": 1
+  }
+}
