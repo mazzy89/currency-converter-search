@@ -4,5 +4,10 @@
   ],
   "plugins": [
     "transform-async-to-generator"
-  ]
+  ],
+  "env": {
+    "development": {
+      "sourceMaps": "inline"
+    }
+  }
 }
