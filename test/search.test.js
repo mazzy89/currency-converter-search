@@ -34,9 +34,10 @@ suite('role:search', () => {
   suite('cmd:latest', () => {
     test('returns the latest foreign exchange reference rates', (done) => {
       const seneca = createInstance(done)
+
       seneca.act({ role: 'search', cmd: 'latest' }, (err, reply) => {
-        expect(err).to.not.exist
-        expect(reply).to.exist
+        expect(err).to.not.exist()
+        expect(reply).to.exist()
         expect(reply).to.be.an.object()
         done()
       })

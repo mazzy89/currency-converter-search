@@ -3,19 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/srv/search.js",
+  "bin": {
+    "lab": "./node_modules/.bin/lab"
+  },
   "scripts": {
     "start": "node dist/index.js",
     "build": "./node_modules/.bin/babel lib -d dist",
-    "test": "./node_modules/.bin/lab -v -T node_modules/lab-babel -P test -I __core-js_shared__"
+    "test": "./node_modules/.bin/lab -a code -v -T node_modules/lab-babel -P test -I __core-js_shared__",
+    "test-cov-html": "./node_modules/.bin/lab -a code -v -T node_modules/lab-babel -P test -S -r html -o coverage.html",
+    "deploy": "npm install && npm build"
   },
   "keywords": [],
-  "author": "",
+  "author": "Salvatore Mazzarino <apocalipse89@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "6.9.0",
     "babel-eslint": "6.0.4",
     "babel-plugin-transform-async-to-generator": "6.8.0",
-    "babel-polyfill": "^6.9.1",
+    "babel-polyfill": "6.9.1",
     "babel-preset-es2015": "6.9.0",
     "code": "3.0.0",
     "eslint": "2.11.1",
@@ -31,5 +36,8 @@
     "proxyquire": "1.7.9",
     "seneca": "2.1.0",
     "wreck": "8.0.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }
