@@ -1,5 +1,5 @@
 import test from 'ava'
-import config from 'getconfig'
+import Config from 'config'
 import Proxyquire from 'proxyquire'
 import Promise from 'bluebird'
 
@@ -7,16 +7,14 @@ import ratesData from './rates-data'
 
 const Seneca = Proxyquire('seneca', {})
 const Search = Proxyquire('..', {
-  'request-promise': () => {
-    return Promise.resolve(ratesData)
-  }
+  'request-promise': () => Promise.resolve(ratesData)
 })
 
 function createInstance () {
   const opts = {}
 
   return Seneca(opts)
-    .use(Search, { FIXER_URI: config.fixerUri })
+    .use(Search, { FIXER_URI: Config.fixerUri })
 }
 
 test.beforeEach(t => {
