@@ -7,7 +7,7 @@
     "lab": "./node_modules/.bin/lab"
   },
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/index.js --seneca.options.tag=currency-converter-search --seneca-log.print",
     "build": "./node_modules/.bin/babel lib -d dist",
     "test": "./node_modules/.bin/lab -a code -v -T node_modules/lab-babel -P test -I __core-js_shared__",
     "test-cov-html": "./node_modules/.bin/lab -a code -v -T node_modules/lab-babel -P test -S -r html -o coverage.html",
