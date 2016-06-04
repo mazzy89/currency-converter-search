@@ -1,0 +1,7 @@
+{
+  "seneca": {
+    "host": "localhost",
+    "port": 40001
+  },
+  "fixerUri": "http://api.fixer.io"
+}

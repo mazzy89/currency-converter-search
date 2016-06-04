@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "bluebird": "^3.4.0",
+    "getconfig": "^3.0.0",
     "proxyquire": "1.7.9",
     "request-promise": "^3.0.0",
     "seneca": "2.1.0"
