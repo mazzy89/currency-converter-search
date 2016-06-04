@@ -1,7 +1,7 @@
 {
   "name": "currency-converter-search",
   "version": "1.0.0",
-  "description": "",
+  "description": "Microservice to search updated currency value",
   "main": "dist/srv/search.js",
   "scripts": {
     "start": "node dist/index.js --seneca.options.tag=currency-converter-search --seneca-log.print",
@@ -39,8 +39,8 @@
     "nyc": "6.4.4"
   },
   "dependencies": {
-    "bluebird": "^3.4.0",
-    "getconfig": "^3.0.0",
+    "bluebird": "3.4.0",
+    "getconfig": "3.0.0",
     "proxyquire": "1.7.9",
     "request-promise": "^3.0.0",
     "seneca": "2.1.0"
