@@ -1,12 +1,17 @@
 {
   "seneca": {
-    "tag": "currency-converter-search"
+    "tag": "currency-converter-search",
+    "log": {
+      "map": [
+        { "level": "all", "handler": "print" }
+      ]
+    }
   },
   "isolated": {
     "host": "localhost",
     "port": 40001
   },
   "fixer": {
-    "uri": "http://api.fixer.io"
+    "uri": "https://api.fixer.io"
   }
 }

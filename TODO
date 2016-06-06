@@ -1,2 +1,1 @@
-- Fix config - node-config package has some reported issue in ES6
-- language-babel has bug?!? - source maps are not created in the files
+- buggy joi validation plugin?!? Add validation rules
