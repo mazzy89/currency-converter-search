@@ -30,6 +30,7 @@ function createInstance () {
 
 test.beforeEach(t => {
   const seneca = createInstance()
+  t.truthy(seneca)
   t.context.act = Promise.promisify(seneca.act, { context: seneca })
 })
 
@@ -46,7 +47,6 @@ test('role:search,cmd:latest - returns the latest foreign exchange reference rat
 test('role:search,cmd:latest,query:USD - returns the latest foreign exchange reference rates for USD currency', async t => {
   const act = t.context.act
 
-  // in this case the latest action will be matched
   const reply = await act({ role: 'search', cmd: 'latest', query: 'USD' })
 
   t.truthy(reply)
