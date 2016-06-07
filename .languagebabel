@@ -8,7 +8,7 @@
   "createTranspiledCode": true,
   "disableWhenNoBabelrcFileInPath": true,
   "projectRoot": true,
-  "suppressSourcePathMessages": false,
+  "suppressSourcePathMessages": true,
   "suppressTranspileOnSaveMessages": false,
   "transpileOnSave": true
 }
