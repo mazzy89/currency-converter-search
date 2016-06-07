@@ -17,6 +17,15 @@
     "report": " ./node_modules/.bin/nyc report --reporter=html",
     "deploy": "npm install && npm build"
   },
+  "nyc": {
+    "exclude": [
+      "test",
+      "test{,-*}.js",
+      "**/*.test.js",
+      "**/__tests__/**",
+      "config/**/*.js"
+    ]
+  },
   "ava": {
     "failFast": true,
     "babel": "inherit",
