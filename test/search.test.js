@@ -3,6 +3,9 @@ import Config from 'getconfig'
 import Sinon from 'sinon'
 import Seneca from 'seneca'
 import Promise from 'bluebird'
+import _ from 'lodash'
+
+require('sinon-as-promised')(Promise)
 
 // load the plugin Search
 import Search from '../'
@@ -12,12 +15,14 @@ import ratesDataEur from './rates-data-eur'
 import ratesDataUsd from './rates-data-usd'
 
 const createDepsMock = () => ({
-  Request: Sinon.stub()
+  getLatest: Sinon.stub()
 })
 
 test.beforeEach(t => {
-  const fixer = Config.fixer
-  const opts = {}
+  const { seneca, fixer } = Config
+  let opts = {}
+
+  opts = _.merge(opts, seneca)
 
   const deps = createDepsMock()
 
@@ -32,13 +37,10 @@ test('role:search,cmd:latest - returns the latest foreign exchange reference rat
   const deps = t.context.deps
   const Service = t.context.Service
 
-  const requestOpts = {
-    uri: `${Config.fixer.uri}/latest?base=EUR`,
-    json: true
-  }
+  const uri = Config.fixer.uri
 
-  deps.Request.withArgs(requestOpts)
-              .returns(Promise.resolve(ratesDataEur))
+  deps.getLatest.withArgs(uri)
+              .resolves(ratesDataEur)
 
   const reply = await Service.actAsync({ role: 'search', cmd: 'latest' })
 
@@ -51,17 +53,36 @@ test('role:search,cmd:latest,query:USD - returns the latest foreign exchange ref
   const deps = t.context.deps
   const Service = t.context.Service
 
-  const requestOpts = {
-    uri: `${Config.fixer.uri}/latest?base=USD`,
-    json: true
-  }
+  const uri = Config.fixer.uri
+  const query = 'USD'
 
-  deps.Request.withArgs(requestOpts)
-              .returns(Promise.resolve(ratesDataUsd))
+  deps.getLatest.withArgs(uri, query)
+              // NOTE: wrap this inside a promise because
+              // await is waiting for a promise
+              .resolves(ratesDataUsd)
 
-  const reply = await Service.actAsync({ role: 'search', cmd: 'latest', query: 'USD' })
+  const reply = await Service.actAsync({ role: 'search', cmd: 'latest', query })
 
   t.truthy(reply)
   t.is(reply.base, 'USD')
   t.is(reply.date, '2016-06-03')
+})
+
+test('role:search,cmd:latest,query:ZZZ - throws an error when passing as query an invalid base', async t => {
+  t.plan(1)
+  const deps = t.context.deps
+  const Service = t.context.Service
+
+  const uri = Config.fixer.uri
+  const query = 'ZZZ'
+
+  deps.getLatest.withArgs(uri, query)
+              .rejects(new Error('Invalid base'))
+
+  try {
+    await Service.actAsync({ role: 'search', cmd: 'latest', query })
+  }
+  catch (err) {
+    t.truthy(err)
+  }
 })
