@@ -1,43 +1,46 @@
 import test from 'ava'
 import Config from 'getconfig'
-import Proxyquire from 'proxyquire'
+import Sinon from 'sinon'
+import Seneca from 'seneca'
 import Promise from 'bluebird'
-import Url from 'url'
 
+// load the plugin Search
+import Search from '../'
+
+// mock data
 import ratesDataEur from './rates-data-eur'
 import ratesDataUsd from './rates-data-usd'
 
-const Seneca = Proxyquire('seneca', {})
-const Search = Proxyquire('..', {
-  'request-promise': (opts) => {
-    const parsedUri = Url.parse(opts.uri, true)
-    if (parsedUri.query.base === 'USD') {
-      return Promise.resolve(ratesDataUsd)
-    }
-    else {
-      return Promise.resolve(ratesDataEur)
-    }
-  }
+const createDepsMock = () => ({
+  Request: Sinon.stub()
 })
 
-function createInstance () {
+test.beforeEach(t => {
   const fixer = Config.fixer
   const opts = {}
 
-  return Seneca(opts)
-    .use(Search, fixer)
-}
+  const deps = createDepsMock()
 
-test.beforeEach(t => {
-  const seneca = createInstance()
-  t.truthy(seneca)
-  t.context.act = Promise.promisify(seneca.act, { context: seneca })
+  const Service = Seneca(opts)
+    .use(Search(deps), fixer)
+
+  t.context.deps = deps
+  t.context.Service = Promise.promisifyAll(Service)
 })
 
 test('role:search,cmd:latest - returns the latest foreign exchange reference rates for default base (EUR)', async t => {
-  const act = t.context.act
+  const deps = t.context.deps
+  const Service = t.context.Service
 
-  const reply = await act({ role: 'search', cmd: 'latest' })
+  const requestOpts = {
+    uri: `${Config.fixer.uri}/latest?base=EUR`,
+    json: true
+  }
+
+  deps.Request.withArgs(requestOpts)
+              .returns(Promise.resolve(ratesDataEur))
+
+  const reply = await Service.actAsync({ role: 'search', cmd: 'latest' })
 
   t.truthy(reply)
   t.is(reply.base, 'EUR')
@@ -45,9 +48,18 @@ test('role:search,cmd:latest - returns the latest foreign exchange reference rat
 })
 
 test('role:search,cmd:latest,query:USD - returns the latest foreign exchange reference rates for USD currency', async t => {
-  const act = t.context.act
+  const deps = t.context.deps
+  const Service = t.context.Service
 
-  const reply = await act({ role: 'search', cmd: 'latest', query: 'USD' })
+  const requestOpts = {
+    uri: `${Config.fixer.uri}/latest?base=USD`,
+    json: true
+  }
+
+  deps.Request.withArgs(requestOpts)
+              .returns(Promise.resolve(ratesDataUsd))
+
+  const reply = await Service.actAsync({ role: 'search', cmd: 'latest', query: 'USD' })
 
   t.truthy(reply)
   t.is(reply.base, 'USD')
