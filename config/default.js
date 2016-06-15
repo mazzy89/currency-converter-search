@@ -8,7 +8,6 @@ module.exports = {
     }
   },
   isolated: {
-    host: 'localhost',
     port: 40001
   },
   fixer: {

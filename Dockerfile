@@ -7,8 +7,10 @@ ADD package.json /src/
 
 WORKDIR /src
 
-RUN npm run deploy
+RUN npm install
 
 COPY . /src
+
+RUN npm run build
 
 CMD ["npm", "start"]
