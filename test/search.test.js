@@ -45,8 +45,9 @@ test('role:search,cmd:latest - returns the latest foreign exchange reference rat
   const reply = await Service.actAsync({ role: 'search', cmd: 'latest' })
 
   t.truthy(reply)
-  t.is(reply.base, 'EUR')
-  t.is(reply.date, '2016-06-02')
+  t.is(reply.ok, true)
+  t.is(reply.data.base, 'EUR')
+  t.is(reply.data.date, '2016-06-02')
 })
 
 test('role:search,cmd:latest,query:USD - returns the latest foreign exchange reference rates for USD currency', async t => {
@@ -64,12 +65,12 @@ test('role:search,cmd:latest,query:USD - returns the latest foreign exchange ref
   const reply = await Service.actAsync({ role: 'search', cmd: 'latest', query })
 
   t.truthy(reply)
-  t.is(reply.base, 'USD')
-  t.is(reply.date, '2016-06-03')
+  t.is(reply.ok, true)
+  t.is(reply.data.base, 'USD')
+  t.is(reply.data.date, '2016-06-03')
 })
 
 test('role:search,cmd:latest,query:ZZZ - throws an error when passing as query an invalid base', async t => {
-  t.plan(1)
   const deps = t.context.deps
   const Service = t.context.Service
 
@@ -79,10 +80,8 @@ test('role:search,cmd:latest,query:ZZZ - throws an error when passing as query a
   deps.getLatest.withArgs(uri, query)
               .rejects(new Error('Invalid base'))
 
-  try {
-    await Service.actAsync({ role: 'search', cmd: 'latest', query })
-  }
-  catch (err) {
-    t.truthy(err)
-  }
+  const reply = await Service.actAsync({ role: 'search', cmd: 'latest', query })
+
+  t.truthy(reply)
+  t.is(reply.ok, false)
 })

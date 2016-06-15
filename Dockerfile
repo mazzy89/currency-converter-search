@@ -1,5 +1,5 @@
 # currency-converter-search
-FROM node:6.2.1
+FROM node:6.2
 
 RUN mkdir /src
 
@@ -7,7 +7,7 @@ ADD package.json /src/
 
 WORKDIR /src
 
-RUN npm deploy
+RUN npm run deploy
 
 COPY . /src
 
