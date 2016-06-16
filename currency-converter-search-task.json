@@ -1,0 +1,14 @@
+{
+  "family": "currency-converter-search",
+  "containerDefinitions": [{
+    "image": "264721266761.dkr.ecr.us-east-1.amazonaws.com/microservices/currency-converter-search:latest",
+    "name": "currency-converter-search",
+    "cpu": 10,
+    "memory": 256,
+    "essential": true,
+    "portMappings": [{
+      "containerPort": 40001,
+      "hostPort": 40001
+    }]
+  }]
+}
