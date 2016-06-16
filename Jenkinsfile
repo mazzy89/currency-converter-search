@@ -5,7 +5,7 @@ node {
 
   docker.withRegistry("https://264721266761.dkr.ecr.eu-west-1.amazonaws.com", "ecr:a-credential-id") {
 
-    Stage 'Build'
+    stage 'Build'
 
     def currencyConvSearch = docker.build("microservices/currency-converter-search:${env.BUILD_TAG}", "currency-converter-search")
 
