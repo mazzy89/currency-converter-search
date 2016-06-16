@@ -12,13 +12,9 @@ node {
     stage "Build"
     def currencyConvSearchImg = docker.build("microservices/currency-converter-search:${env.BUILD_TAG}")
 
-    stage "Push"
-
+    stage "Push & Tag"
     // Let us tag and push the newly built image. Will tag using the image name provided
     // in the 'docker.build' call above (which included the build number on the tag).
-    currencyConvSearchImg.push()
-
-    stage "Tag"
     currencyConvSearchImg.push("latest")
   }
 
