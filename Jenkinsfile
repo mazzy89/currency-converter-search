@@ -7,7 +7,7 @@ node {
 
     stage 'Build'
 
-    def currencyConvSearch = docker.build("microservices/currency-converter-search:${env.BUILD_TAG}", "currency-converter-search")
+    def currencyConvSearch = docker.build("microservices/currency-converter-search:${env.BUILD_TAG}")
 
     currencyConvSearch.push()
   }
