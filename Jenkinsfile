@@ -2,7 +2,7 @@
 node {
 
   stage "Checkout"
-  git url: "https://github.com/mazzy89/currency-converter-search.git"
+  git url: "https://github.com/mazzy89/currency-converter-search.git", branch: "develop"
 
   // We are pushing to a private secure ECR docker registry
   // 'ecr:id' is the username/password credentials ID as defined in Jenkins Credentials.
@@ -23,7 +23,7 @@ node {
   // Create a new task definition for this build
   stage "Create & Register Task"
   def IMAGE = "264721266761.dkr.ecr.us-east-1.amazonaws.com/currency-converter/search:${env.BUILD_NUMBER}"
-  sh "cat task-blueprint.json > jq .containerDefinitions[0].image=\"${IMAGE}\" > currency-converter-search-task-${env.BUILD_NUMBER}.json"
+  sh "cat task-blueprint.json | jq .containerDefinitions[0].image=\"${IMAGE}\" > currency-converter-search-task-${env.BUILD_NUMBER}.json"
   sh "aws --region us-east-1 ecs register-task-definition --family currency-converter-search --cli-input-json file://currency-converter-search-task-${env.BUILD_NUMBER}.json"
 
   // Update the service
