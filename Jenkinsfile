@@ -10,14 +10,35 @@ node {
   docker.withRegistry("https://264721266761.dkr.ecr.us-east-1.amazonaws.com", "ecr:2bfe1664-ca6a-4a35-8b60-89f133cb8e98") {
 
     stage "Build"
-    def currencyConvSearchImg = docker.build("microservices/currency-converter-search:${env.BUILD_TAG}")
+    def currencyConvSearchImg = docker.build("currency-converter/search:${env.BUILD_NUMBER}")
+
+    // TODO: place here a test
 
     stage "Push & Tag"
     // Let us tag and push the newly built image. Will tag using the image name provided
     // in the 'docker.build' call above (which included the build number on the tag).
-    currencyConvSearchImg.push("latest")
+    currencyConvSearchImg.push("${env.BUILD_NUMBER}")
   }
 
-  stage "Register Task"
-  sh "aws ecs register-task-definition --cli-input-json file://currency-converter-search-task.json"
+  // Create a new task definition for this build
+  stage "Create & Register Task"
+  def IMAGE = "264721266761.dkr.ecr.us-east-1.amazonaws.com/currency-converter/search:${env.BUILD_NUMBER}"
+  sh "cat task-blueprint.json > jq .containerDefinitions[0].image=\"${IMAGE}\" > currency-converter-search-task-${env.BUILD_NUMBER}.json"
+  sh "aws --region us-east-1 ecs register-task-definition --family currency-converter-search --cli-input-json file://currency-converter-search-task-${env.BUILD_NUMBER}.json"
+
+  // Update the service
+  stage "Update Service"
+  def SERVICE_NAME = "currency-converter-search-srv"
+  def TASK_FAMILY = "currency-converter-search"
+
+  sh "aws --region us-east-1 ecs describe-task-definition --task-definition currency-converter-search | jq .taskDefinition.revision > task_revision"
+  def TASK_REVISION = readFile('task_revision').trim()
+
+  sh "aws --region us-east-1 ecs describe-services --services ${SERVICE_NAME} | jq .services[0].desiredCount > desired_count"
+  def DESIRED_COUNT = readFile('desired_count').trim().toInteger()
+  if (DESIRED_COUNT == 0) {
+    DESIRED_COUNT = 1
+  }
+
+  sh "aws --region us-east-1 ecs update-service --cluster default --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT}"
 }
