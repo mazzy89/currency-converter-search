@@ -22,8 +22,7 @@ node {
 
   // Create a new task definition for this build
   stage "Create & Register Task"
-  def IMAGE = "264721266761.dkr.ecr.us-east-1.amazonaws.com/currency-converter/search:${env.BUILD_NUMBER}"
-  sh "cat task-blueprint.json | jq .containerDefinitions[0].image=\"${IMAGE}\" > currency-converter-search-task-${env.BUILD_NUMBER}.json"
+  sh "sed -e \"s;BUILD_NUMBER;${env.BUILD_NUMBER};g\" task-blueprint.json > currency-converter-search-task-${env.BUILD_NUMBER}.json"
   sh "aws --region us-east-1 ecs register-task-definition --family currency-converter-search --cli-input-json file://currency-converter-search-task-${env.BUILD_NUMBER}.json"
 
   // Update the service
