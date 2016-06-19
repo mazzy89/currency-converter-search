@@ -25,21 +25,21 @@ node {
   // Create a new task definition for this build
   stage "Create & Register Task"
   sh "sed -e \"s;BUILD_NUMBER;${env.BUILD_NUMBER};g\" task-blueprint.json > currency-converter-search-task-${env.BUILD_NUMBER}.json"
-  sh "${AWS} ecs register-task-definition --family currency-converter-search --cli-input-json file://currency-converter-search-task-${env.BUILD_NUMBER}.json"
+  sh "${AWS} ecs register-task-definition --region eu-central-1 --family currency-converter-search --cli-input-json file://currency-converter-search-task-${env.BUILD_NUMBER}.json"
 
   // Update the service
   stage "Update Service"
   def SERVICE_NAME = "currency-converter-search-srv"
   def TASK_FAMILY = "currency-converter-search"
 
-  sh "${AWS} ecs describe-task-definition --task-definition currency-converter-search | jq .taskDefinition.revision > task_revision"
+  sh "${AWS} ecs describe-task-definition --region eu-central-1 --task-definition currency-converter-search | jq .taskDefinition.revision > task_revision"
   def TASK_REVISION = readFile('task_revision').trim()
 
-  sh "${AWS} ecs describe-services --services ${SERVICE_NAME} | jq .services[0].desiredCount > desired_count"
+  sh "${AWS} ecs describe-services --region eu-central-1 --services ${SERVICE_NAME} | jq .services[0].desiredCount > desired_count"
   def DESIRED_COUNT = readFile('desired_count').trim().toInteger()
   if (DESIRED_COUNT == 0) {
     DESIRED_COUNT = 1
   }
 
-  sh "${AWS} ecs update-service --cluster default --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT}"
+  sh "${AWS} ecs update-service --region eu-central-1 --cluster default --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT}"
 }
