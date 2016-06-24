@@ -1,6 +1,7 @@
 #!groovy
 node {
 
+  // TODO: ssh key
   stage "Checkout"
   git url: "https://github.com/mazzy89/currency-converter-search.git", branch: "develop"
 
