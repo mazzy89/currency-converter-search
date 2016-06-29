@@ -11,7 +11,6 @@ RUN npm install
 
 COPY . /src
 
-RUN npm run build
-
 EXPOSE 40001
+
 CMD ["npm", "start"]
