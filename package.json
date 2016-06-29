@@ -18,18 +18,18 @@
     "start": "node dist/index.js",
     "postinstall": "better-npm-run postinstall",
     "test": "better-npm-run test",
-    "watch:test": "./node_modules/.bin/ava --watch",
-    "coverage": " ./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
+    "watch:test": "ava --watch",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "betterScripts": {
     "postinstall": {
-      "command": "./node_modules/.bin/babel lib -d dist",
+      "command": "babel lib -d dist",
       "env": {
         "BABEL_ENV": "production"
       }
     },
     "test": {
-      "command": "./node_modules/.bin/nyc ./node_modules/.bin/ava",
+      "command": "nyc ava",
       "env": {
         "NODE_ENV": "test"
       }
