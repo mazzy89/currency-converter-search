@@ -1,5 +1,6 @@
 module.exports = {
   seneca: {
+    legacy: { validate: false },
     tag: 'currency-converter-search',
     log: {
       map: [
