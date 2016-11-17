@@ -1,7 +1,7 @@
 {
   "babelMapsPath": "",
   "babelMapsAddUrl": false,
-  "babelSourcePath": "lib",
+  "babelSourcePath": "src",
   "babelTranspilePath": "dist",
   "createMap": false,
   "createTargetDirectories": true,

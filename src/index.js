@@ -3,7 +3,7 @@ import 'babel-polyfill'
 import Config from 'getconfig'
 import Seneca from 'seneca'
 
-import { getLatest } from './helpers/api'
+import { getLatest } from './lib/api'
 
 const {
   seneca,
