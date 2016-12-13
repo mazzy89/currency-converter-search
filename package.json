@@ -23,7 +23,7 @@
   },
   "betterScripts": {
     "postinstall": {
-      "command": "babel lib -d dist",
+      "command": "babel src -d dist",
       "env": {
         "BABEL_ENV": "production"
       }
